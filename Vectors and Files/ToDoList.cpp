@@ -42,7 +42,7 @@ string DoThis(vector<string>& list) {				//Display AND removes next item from th
 	return lastItem;
 }
 
-bool Save(vector<string> list) {					//Asks users to input file name | Saves al items to the file
+bool Save(const vector<string> list) {					//Asks users to input file name | Saves al items to the file
 	
 	bool saved = false;
 	string fileName;
