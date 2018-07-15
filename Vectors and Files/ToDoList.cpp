@@ -8,7 +8,7 @@ using namespace std;
 /***************************************************************
 Problem: Vectors Assignment
 Question:
-Write a complete C++ program that will include a list of tasks in a “To Do Today” list in memory.
+Write a complete C++ program that will include a list of tasks in a “To Do Today?list in memory.
 Make a menu that allows the user to select an option to perform using functions. 
 
 Name: Royce Kim
@@ -28,6 +28,7 @@ string ListAllItems(vector<string> list) {			//Displays all items in the list (i
 	for (int i = 0; i < list.size(); i++) {
 		completeList += to_string(i+1) + "." + list.at(i) + "\n";
 	}
+
 	return completeList;
 }
 
@@ -41,19 +42,23 @@ string DoThis(vector<string>& list) {				//Display AND removes next item from th
 	return lastItem;
 }
 
-string Save(vector<string> list) {					//Asks users to input file name | Saves al items to the file
-
+bool Save(vector<string> list) {					//Asks users to input file name | Saves al items to the file
+	
+	bool saved = false;
 	string fileName;
-	cout << "What name would you like to save the list under?\n==| ";
+	cout << "What name would you like to save the list under?" << endl << "==| ";
 	getline(cin, fileName);
 
 	ofstream saveFile(fileName);
+	if (saveFile.is_open())
+		saved = true;
 
-	for (int i = 0; i < list.size(); i++) {			//adds each item into text file
-		saveFile << list.at(i) + "\n";
+	for (auto item : list) {			//adds each item into text file
+		saveFile << item + "\n";
 	}
 	saveFile.close();
-	return fileName;
+
+	return saved;
 }
 
 void Load( vector<string>& list) {					//Ask user to input file name	| Loads items from file and populates the todo list with these items
@@ -61,7 +66,7 @@ void Load( vector<string>& list) {					//Ask user to input file name	| Loads ite
 	string line = "";
 	string item = "";	//stanford style? Personally don't like this
 	
-	cout << "Enter the name of the file, accuratley (with extension).\n|";
+	cout << "Enter the name of the file, accuratley (with extension)." << endl << "| ";
 	getline(cin, fileName);
 	ifstream loadingFile(fileName);
 
@@ -77,11 +82,11 @@ void Load( vector<string>& list) {					//Ask user to input file name	| Loads ite
 }
 
 string AllDone() {
-	return "Nice! You did everything on your list I assume, see you next time!";
+	return "Nice! You did everything on your list, I assume, see you next time!";
 }
 
 void prompt() {									//Function that simply cout's the prompt. cleans up the main...	  							
-	cout << "\n\t<Menu>" << endl
+	cout << endl << "\t<Menu>" << endl
 		<< "(enter the number correlated to the command)" << endl
 		<< "1...Add to To-Do list" << endl
 		<< "2...Show the next item on the To-Do list" << endl
@@ -103,6 +108,7 @@ int main() {
 	
 	while (inputNum != 7) {	//continue untile user inputs 7
 		prompt();
+		string savedTxt = "Failed";
 		getline(cin, userInput);
 		stringstream(userInput) >> inputNum;
 
@@ -124,11 +130,12 @@ int main() {
 			break;
 
 		case 4:
-			cout << endl << "\t<YOUR LIST>\n" << ListAllItems(toDoList) << endl;
+			cout << endl << "\t<YOUR LIST>" << endl << ListAllItems(toDoList) << endl;
 			break;
 
 		case 5:
-			cout << endl << "Current list has been saved under the name " << Save(toDoList) << endl;
+			savedTxt = (Save(toDoList)) ? "SUCCESS" : "FAILED";
+			cout << endl << "Save " << savedTxt << endl;
 			break;
 
 		case 6:
